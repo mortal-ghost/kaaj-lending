@@ -13,6 +13,10 @@ router = APIRouter()
 def create_application(application: schemas.ApplicationCreate, db: Session = Depends(deps.get_db)):
     return crud.create_application(db=db, application=application)
 
+@router.get("/", response_model=List[schemas.Application])
+def read_applications(skip: int = 0, limit: int = 100, db: Session = Depends(deps.get_db)):
+    return crud.get_applications(db, skip=skip, limit=limit)
+
 @router.get("/{application_id}", response_model=schemas.Application)
 def read_application(application_id: int, db: Session = Depends(deps.get_db)):
     db_app = crud.get_application(db, application_id=application_id)

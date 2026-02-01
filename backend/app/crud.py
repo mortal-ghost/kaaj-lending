@@ -31,3 +31,6 @@ def create_application(db: Session, application: schemas.ApplicationCreate):
 
 def get_application(db: Session, application_id: int):
     return db.query(models.Application).filter(models.Application.id == application_id).first()
+
+def get_applications(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Application).offset(skip).limit(limit).all()
