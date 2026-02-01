@@ -1,14 +1,21 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# Use SQLite for now since Docker/Postgres is skipped
-SQLALCHEMY_DATABASE_URL = "sqlite:///./lender_app.db"
-# For Postgres later:
-# SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost/lender_app"
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost/lender_app")
+
+if "sqlite" in SQLALCHEMY_DATABASE_URL:
+    connect_args = {"check_same_thread": False}
+else:
+    connect_args = {}
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URL, connect_args=connect_args
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
