@@ -32,23 +32,47 @@ backend/app/
 
 ### Prerequisites
 
-- Python 3.9+
+- Python 3.10+
 - Node.js 18+
+- Docker & Docker Compose (for PostgreSQL)
 - `pdftotext` (optional, for PDF ingestion)
 
 ### 1. Backend Setup
 
-```bash
-cd backend
-# Install dependencies
-pip install -r requirements.txt
+1.  **Configure Environment**:
+    Create a `.env` file in `backend/.env`:
 
-# Seed the database
-python -m seed
+    ```env
+    DATABASE_URL=postgresql://postgres:postgres@localhost:5433/lender_app
+    ```
 
-# Run the API Server
-uvicorn app.main:app --reload
-```
+    _(Port 5433 is used to avoid conflicts with local Postgres)_
+
+2.  **Start Database**:
+
+    ```bash
+    # From project root
+    docker compose up -d
+    ```
+
+3.  **Install & Run**:
+
+    ```bash
+    cd backend
+    # Recommended: Create Virtual Env
+    python -m venv venv
+    source venv/bin/activate
+
+    # Install Deps
+    pip install -r requirements.txt
+    pip install psycopg2-binary python-dotenv
+
+    # Build Schema & Seed
+    python -m seed
+
+    # Start API
+    uvicorn app.main:app --reload
+    ```
 
 API will be running at `http://localhost:8000`. Docs at `/docs`.
 
