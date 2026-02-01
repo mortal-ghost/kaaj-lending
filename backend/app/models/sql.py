@@ -52,5 +52,8 @@ class Application(Base):
     state = Column(String)
     zip_code = Column(String)
 
+    # Extensibility: Store arbitrary extra fields here (e.g., specific form data, AI-extracted metadata)
+    data = Column(JSON, default={})
+
     status = Column(String, default=ApplicationStatus.PENDING)
     created_at = Column(DateTime, default=datetime.utcnow)
